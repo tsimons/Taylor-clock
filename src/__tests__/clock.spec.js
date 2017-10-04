@@ -19,25 +19,27 @@ describe('Clock class', function () {
     });
   });
 
-  describe('getDegreeForMinutes', function () {
+  describe('getDegreesForMinutes', function () {
+    let clock;
     function minuteTest(timeString, degree) {
       clock = new Clock(timeString);
-      expect(clock.getDegreeForMinutes()).toEqual(degree);
+      expect(clock.getDegreesForMinutes()).toEqual(degree);
     }
 
     it('returns the clockwise degree for the minute hand', function () {
       let minute = 0;
-      while(minute <= 60) {
+      while(minute < 60) {
         minuteTest(`01:${minute}`, minute * 6);
         minute += 1;
       }
     });
   });
 
-  describe('getDegreeForHour', function () {
+  describe('getDegreesForHours', function () {
+    let clock;
     function hourTest(timeString, degree) {
       clock = new Clock(timeString);
-      expect(clock.getDegreeForHour()).toEqual(degree);
+      expect(clock.getDegreesForHours()).toEqual(degree);
     }
 
     it('returns the clockwise degree for the minute hand', function () {
@@ -55,7 +57,7 @@ describe('Clock class', function () {
       const clock = new Clock('01:55');
       clock.subscribe(cb);
       clock.tick();
-      expect(cb).toHaveBeenCalledWith();
+      expect(cb).toHaveBeenCalledWith(clock);
     });
   });
 
@@ -71,7 +73,7 @@ describe('Clock class', function () {
   describe('start', function () {
     it('increments time every minute', function () {
       const clock = new Clock('01:59');
-      jest.runTimersToTime(1001 * 60);
+      jest.runTimersToTime(60001);
       expect(clock.hours).toEqual(2);
       expect(clock.minutes).toEqual(0);
     });
