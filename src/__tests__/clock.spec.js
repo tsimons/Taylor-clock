@@ -51,13 +51,44 @@ describe('Clock class', function () {
     });
   });
 
+  describe('getDegreesBetween', function () {
+    it('gets the degrees between the hour and minute hand when the minute hand is in front of the hour', function () {
+      const clock = new Clock('03:30');
+      expect(clock.getDegreesBetween()).toEqual(90);
+    });
+
+    it('gets the degrees between the hour and minute hand when the minute hand is behind the hour', function () {
+      const clock = new Clock('09:30');
+      expect(clock.getDegreesBetween()).toEqual(90);
+    });
+  });
+
   describe('subscribe', function () {
-    it('notifies the subscriber on each tick', function () {
+    it('adds the callback to the list of subscribers', function () {
       let cb = jest.fn();
       const clock = new Clock('01:55');
       clock.subscribe(cb);
-      clock.tick();
-      expect(cb).toHaveBeenCalledWith(clock);
+      expect(clock.subscribers).toEqual(expect.arrayContaining([cb]));
+    });
+  });
+
+  describe('notify', function () {
+    it('calls all the subscribed callbacks', function () {
+      let cb1 = jest.fn();
+      let cb2 = jest.fn();
+      let cb3 = jest.fn();
+
+      const clock = new Clock('01:55');
+      clock.subscribe(cb1);
+      clock.subscribe(cb2);
+      clock.subscribe(cb3);
+
+      clock.notify();
+
+
+      expect(cb1).toHaveBeenCalledWith(clock);
+      expect(cb2).toHaveBeenCalledWith(clock);
+      expect(cb3).toHaveBeenCalledWith(clock);
     });
   });
 
