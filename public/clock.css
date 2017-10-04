@@ -1,0 +1,16 @@
+.clock__input:invalid {
+  border: 1px solid red;
+}
+
+.clock__input:focus:invalid {
+  outline: none;
+}
+
+.clock__input-error {
+  display: none;
+  color: red;
+}
+
+.clock__input:invalid + .clock__input-error {
+  display: block;
+}

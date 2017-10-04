@@ -1,13 +1,15 @@
 {
   "scripts": {
-    "test": "jest src",
-    "test:watch": "jest src --watch"
+    "test": "jest src --coverage",
+    "test:watch": "jest src --watch",
+    "build" : "rollup -c rollup.config.js"
   },
   "devDependencies": {
     "babel": "^6.23.0",
     "babel-jest": "^21.2.0",
     "babel-preset-es2015": "^6.24.1",
     "jest": "^21.2.1",
-    "regenerator-runtime": "^0.11.0"
+    "regenerator-runtime": "^0.11.0",
+    "rollup": "^0.50.0"
   }
 }

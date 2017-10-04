@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Analog Clock</title>
+  <link rel="stylesheet" href="clock.css">
+</head>
+<body>
+  <div id="clock" class="clock">
+    <form class="clock__input-container">
+      <p><label for="ClockInput">Enter a time in HH:MM format</label></p>
+      <p>
+        <input id="ClockInput" type="text" class="clock__input" pattern="\d{2}:\d{2}" required>
+        <span class="clock__input-error">Invalid Format</span>
+      </p>
+
+    </form>
+
+    <p class="clock__hours-degree-container">
+      Clockwise hours degrees: <span class="clock__hours-degree"></span>
+    </p>
+    <p class="clock__minutes-degree-container">
+      Clockwise minutes degrees: <span class="clock__minutes-degree"></span>
+    </p>
+    <p class="clock__both-degree-container">
+      Clockwise degrees between both hands: <span class="clock__both-degree"></span>
+    </p>
+
+  </div>
+
+  <script src="./clock.js"></script>
+</body>
+</html>

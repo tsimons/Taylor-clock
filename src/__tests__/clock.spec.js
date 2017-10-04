@@ -12,10 +12,31 @@ describe('Clock class', function () {
     });
 
     it('defaults to the current time when nothing is provided', function () {
-      const date = new Date();
       const clock = new Clock();
-      expect(clock.minutes).toEqual(date.getMinutes());
-      expect(clock.hours).toEqual(date.getHours());
+      // [TJS]
+      // I mainly want to test that something other than undefined is returned
+      // I dont want to add the 12 hour logic here
+      expect(clock.minutes).toEqual(expect.any(Number));
+      expect(clock.hours).toEqual(expect.any(Number));
+    });
+  });
+
+  describe('hours getter', function () {
+    it('returns the hour', function () {
+      const clock = new Clock('01:00');
+      expect(clock.hours).toEqual(1);
+    });
+
+    it('converts 24 hour number into 12 hour format', function () {
+      const clock = new Clock('18:00');
+      expect(clock.hours).toEqual(6);
+    });
+  });
+
+  describe('minutes getter', function () {
+    it('returns the current minutes', function () {
+      const clock = new Clock('01:30');
+      expect(clock.minutes).toEqual(30);
     });
   });
 
@@ -69,6 +90,13 @@ describe('Clock class', function () {
       const clock = new Clock('01:55');
       clock.subscribe(cb);
       expect(clock.subscribers).toEqual(expect.arrayContaining([cb]));
+    });
+
+    it('calls the callback immediatly', function () {
+      let cb = jest.fn();
+      const clock = new Clock('01:55');
+      clock.subscribe(cb);
+      expect(cb).toHaveBeenCalledWith(clock);
     });
   });
 

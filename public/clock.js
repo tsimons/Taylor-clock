@@ -1,3 +1,6 @@
+var Clock = (function () {
+'use strict';
+
 /**
  * Clock Class
  * @class Clock
@@ -5,7 +8,7 @@
  * @param {Number} minutes the current minutes of the clock
  * Transform a date object in to a 12 hour analog clock
  */
-export default class Clock {
+class Clock {
   constructor(timeString) {
     this.subscribers = [];
     this.date = new Date();
@@ -104,7 +107,7 @@ export default class Clock {
    * Calls all subscribed callbacks, passing the clock instance to each function
    */
   notify() {
-    this.subscribers.forEach((cb) => cb(this))
+    this.subscribers.forEach((cb) => cb(this));
   }
 
   /**
@@ -114,3 +117,54 @@ export default class Clock {
     setInterval(() => this.tick(), 60000);
   }
 }
+
+const twoDigitNumber = num => num < 10 ? `0${num}` : num;
+const timePattern = /\d{2}:\d{2}/;
+
+/**
+ * @class ClockElement
+ * DOM bindings for the Clock Class
+ */
+class ClockElement {
+  constructor(ele) {
+    if (!ele) { return; }
+
+    this.refs = {};
+    this.refs.clockElement = ele;
+    this.refs.clockInput = this.refs.clockElement.querySelector('.clock__input');
+
+    this.refs.hoursElement = this.refs.clockElement.querySelector('.clock__hours-degree');
+    this.refs.minutesElement = this.refs.clockElement.querySelector('.clock__minutes-degree');
+    this.refs.bothElement = this.refs.clockElement.querySelector('.clock__both-degree');
+
+    // call this before adding the events listeners to avoid a change event firing needlessly
+    this.updateTime();
+    this.refs.clockInput.value = `${twoDigitNumber(this.clock.hours)}:${twoDigitNumber(this.clock.minutes)}`;
+
+    
+    this.refs.clockInput.addEventListener('input', () => this.handleInputChange());
+  }
+
+  handleInputChange() {
+    if (!this.refs.clockInput.value.match(timePattern)) { return false; }
+
+    this.updateTime(this.refs.clockInput.value);
+  }
+
+  updateTime(timeSring) {
+    this.clock = new Clock(timeSring);
+    this.clock.subscribe(() => this.updateDegrees());
+  }
+
+  updateDegrees() {
+    this.refs.minutesElement.innerHTML = this.clock.getDegreesForMinutes();
+    this.refs.hoursElement.innerHTML = this.clock.getDegreesForHours();
+    this.refs.bothElement.innerHTML = this.clock.getDegreesBetween();
+  }
+}
+
+new ClockElement(document.querySelector('#clock'));
+
+return ClockElement;
+
+}());
